@@ -1,10 +1,70 @@
-# vulnwatch
+```text
+                 _                          _          _
+  __   __ _   _ | | _ __  __      __  __ _ | |_   ___ | |__
+  \ \ / /| | | || || '_ \ \ \ /\ / / / _` || __| / __|| '_ \
+   \ V / | |_| || || | | | \ V  V / | (_| || |_ | (__ | | | |
+    \_/   \__,_||_||_| |_|  \_/\_/   \__,_| \__| \___||_| |_|
 
-*[Read in English](README.md)*
+  dati pubblici       il tuo Mac                              tu
+ +------------+      +--------------------------------+      +----------------------+
+ | cve.now    |      | ciò che hai installato         |      | report alle 07:30    |
+ | CISA KEV   | ---> | è confrontato qui, in locale;  | ---> | vulnwatch apply <id> |
+ | record CVE |      | aggiornamenti verificati prima |      |                      |
+ | OSV        |      |                                |      |                      |
+ +------------+      +--------------------------------+      +----------------------+
+                    <----- nulla del tuo Mac torna indietro -----
+```
 
-Un controllo giornaliero delle vulnerabilità del tuo Mac che non rivela a nessuno cosa usi.
+**Un controllo giornaliero delle vulnerabilità del tuo Mac che non rivela a nessuno cosa usi.**
 
-Ogni mattina alle 07:30 vulnwatch scarica i dati pubblici sulle vulnerabilità, li confronta **sul tuo Mac** con il software installato e scrive un report. Per ogni voce dice cosa è colpito, qual è la correzione e il comando esatto per applicarla dopo un nuovo audit. Parte in **modalità ombra**: segnala, ma non cambia mai nulla da solo.
+[![tests](https://github.com/cryptosecco/vulnwatch/actions/workflows/tests.yml/badge.svg)](https://github.com/cryptosecco/vulnwatch/actions/workflows/tests.yml) · macOS · solo libreria standard di Python · [MIT](LICENSE) · *[Read in English](README.md)*
+
+## Perché
+
+Il Mac di chi sviluppa ha centinaia di componenti che ricevono correzioni di sicurezza:
+- macOS e le sue app;
+- le formule Homebrew e i comandi npm globali;
+- le copie di Node portate da altri strumenti;
+- le dipendenze fissate in ogni progetto che hai clonato.
+
+Ogni giorno escono vulnerabilità nuove, e alcune sono già sfruttate quando ne leggi. Starci dietro a mano non è realistico. La scorciatoia solita, mandare l'elenco dei pacchetti a un servizio di scansione, consegna a terzi la mappa esatta di cosa non è aggiornato sulla tua macchina.
+
+vulnwatch fa tutto il controllo **sul tuo Mac**:
+- Ogni mattina alle 07:30 scarica gli stessi dati pubblici sulle vulnerabilità che riceve chiunque e li confronta in locale con ciò che hai installato.
+- Ti dice cosa è colpito, qual è la correzione e il comando esatto per applicarla dopo un nuovo audit.
+- Parte in **modalità ombra**: segnala, ma non cambia mai nulla da solo, finché non decidi di accendere gli aggiornamenti automatici.
+
+## Cosa ottieni
+
+Una notifica di macOS come *"3 da approvare · 0 applicate · 0 malevoli"* e un report giornaliero in Markdown, più uno in JSON. Una voce appare così; codici e versioni sono inventati:
+
+```markdown
+### formula brew `openssl@3` `3.5.9` · 2 vulnerabilità
+- Posizione: `/opt/homebrew`
+- Versione corretta: 3.5.10 (fonte: cverecord)
+- KEV: no · Critiche: sì (1)
+- Vulnerabilità: `CVE-2026-1111` (`7c1f0a2b9d4e`), `CVE-2026-2222` (`2b8e4d1c0f3a`)
+
+| controllo | esito | dettaglio |
+|---|---|---|
+| tap_core | ✅ ok |  |
+| candidate | ✅ ok | `3.5.10` |
+| same_major | ✅ ok |  |
+| bottle_available | ✅ ok |  |
+| dry_run_only_target | ✅ ok |  |
+| post_install_unchanged | ✅ ok |  |
+| caveats_unchanged | ✅ ok |  |
+| not_running_service | ✅ ok |  |
+| not_deprecated | ✅ ok |  |
+| cooldown | ✅ ok | `pubblicata 96 ore fa` |
+
+- Comando: `vulnwatch apply 7c1f0a2b9d4e`
+> [testo non fidato] `OpenSSL: titolo d'esempio`
+```
+
+Il report elenca anche ciò che non ha ancora una patch, le corrispondenze approssimate da verificare, i pacchetti malevoli, le voci ignorate e se tutte le fonti hanno risposto. In modalità ombra mostra anche cosa vulnwatch avrebbe aggiornato da solo.
+
+## Perché fidarsi
 
 - **Privato per costruzione.** Quello che scarica dalle fonti di vulnerabilità non dipende mai da cosa hai installato, quindi le fonti non possono ricavare il tuo software dalle richieste. Il confronto avviene tutto in locale.
 - **Prima l'audit, poi l'applicazione.** Prima di applicare un aggiornamento lo verifica sul canale ufficiale:
@@ -32,6 +92,18 @@ Le confronta con:
 - pacchetti npm globali;
 - copie di Node e Bun, nel PATH o installate con nvm, volta, fnm, asdf, mise;
 - i pacchetti fissati nei lockfile dei tuoi progetti: `package-lock.json`, `pnpm-lock.yaml`, `yarn.lock`, `bun.lock`, `requirements.txt`.
+
+## Rispetto ad altri strumenti
+
+| Strumento | Cosa copre | Cosa invia |
+|---|---|---|
+| `brew outdated` / `brew upgrade` | solo Homebrew; ogni aggiornamento, non solo quelli di sicurezza | nulla oltre alle richieste di Homebrew stesso |
+| `npm audit` | un progetto alla volta | l'elenco delle dipendenze di quel progetto, al registro npm |
+| Dependabot, Snyk e simili | i repository che colleghi | leggono manifest e lockfile nel loro servizio |
+| `osv-scanner` | le cartelle che gli indichi | nomi e versioni dei pacchetti all'API di OSV, salvo uso offline |
+| **vulnwatch** | tutto il Mac: macOS, app, Homebrew, npm globali, copie di Node/Bun, i lockfile di ogni progetto | niente del tuo software verso le fonti di vulnerabilità |
+
+Non sostituisce quegli strumenti: tieni Dependabot sui repository, perché vulnwatch sorveglia la macchina su cui lavori. In più fa l'audit di ogni aggiornamento prima di applicarlo, cosa che gli altri non fanno per te.
 
 ## Installazione (circa 5 minuti)
 
@@ -64,6 +136,17 @@ Non invia nulla in rete di suo (il controllo aggiornamenti di npm viene spento) 
 - **Il report** finisce in `~/Library/Application Support/vulnwatch/reports/<data>.md`, insieme a un `.json`. Una notifica ti dice quante voci ti aspettano.
 - **Ogni mattina alle 07:30** ripete il controllo e scarica solo ciò che è cambiato. Se il Mac dorme, parte al risveglio.
 - **Non applica nulla** finché è attiva la modalità ombra. Ogni voce del report dice cosa fare; per formule Homebrew e npm globali dà il comando esatto `vulnwatch apply <id>`.
+
+```
+$ vulnwatch status
+Installato:  commit 0123456789ab
+Integrità:   integra
+Pianificato: ogni giorno alle 07:30
+Ultimo run:  partito 2026-11-03T06:30:00Z, finito 2026-11-03 06:41:12 UTC, esito ok
+Report:      ~/Library/Application Support/vulnwatch/reports/2026-11-03.md
+             Riepilogo per elemento: 0 malevoli · 0 applicati · 0 in ombra · 3 da approvare · 1 senza patch · …
+Modalità:    ombra (solo report, non applica mai nulla da solo)
+```
 
 ## Uso quotidiano
 
