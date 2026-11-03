@@ -1,0 +1,20 @@
+name: tests
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  unittest:
+    runs-on: macos-latest
+    timeout-minutes: 15
+    steps:
+      # Pinned by commit SHA, not by tag: a moved tag cannot change what runs here.
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - name: Run the test suite with the system Python (stdlib only, no network)
+        run: /usr/bin/python3 -I -B -m unittest discover -s tests -t . -p 'test_*.py'

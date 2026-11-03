@@ -1,0 +1,30 @@
+[
+  {
+    "name": "example-db",
+    "service_name": "homebrew.mxcl.example-db",
+    "running": true,
+    "loaded": true,
+    "schedulable": false,
+    "pid": 4242,
+    "exit_code": null,
+    "user": "utente",
+    "status": "started",
+    "file": "/opt/homebrew/opt/example-db/homebrew.mxcl.example-db.plist",
+    "registered": false,
+    "loaded_file": "/Users/utente/Library/LaunchAgents/homebrew.mxcl.example-db.plist"
+  },
+  {
+    "name": "example-cache",
+    "service_name": "homebrew.mxcl.example-cache",
+    "running": false,
+    "loaded": false,
+    "schedulable": false,
+    "pid": null,
+    "exit_code": null,
+    "user": null,
+    "status": "none",
+    "file": "/opt/homebrew/opt/example-cache/homebrew.mxcl.example-cache.plist",
+    "registered": false,
+    "loaded_file": null
+  }
+]

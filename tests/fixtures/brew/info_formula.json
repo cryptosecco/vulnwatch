@@ -1,0 +1,123 @@
+{
+ "casks": [],
+ "formulae": [
+  {
+   "aliases": [],
+   "autobump": true,
+   "bottle": {
+    "stable": {
+     "files": {
+      "arm64_golden_gate": {
+       "cellar": ":any",
+       "sha256": "62c6e88627ca648845e877164e637feb66e64fbcc95a839f1f4a484fdfa359cd",
+       "url": "https://ghcr.io/v2/homebrew/core/aom/blobs/sha256:62c6e88627ca648845e877164e637feb66e64fbcc95a839f1f4a484fdfa359cd"
+      }
+     },
+     "rebuild": 0,
+     "root_url": "https://ghcr.io/v2/homebrew/core"
+    }
+   },
+   "build_dependencies": [
+    "cmake",
+    "pkgconf"
+   ],
+   "caveats": null,
+   "compatibility_version": 1,
+   "conflicts_with": [],
+   "conflicts_with_reasons": [],
+   "dependencies": [
+    "libvmaf"
+   ],
+   "deprecate_args": null,
+   "deprecated": false,
+   "deprecation_date": null,
+   "deprecation_reason": null,
+   "deprecation_replacement_cask": null,
+   "deprecation_replacement_formula": null,
+   "desc": "Codec library for encoding and decoding AV1 video streams",
+   "disable_args": null,
+   "disable_date": null,
+   "disable_reason": null,
+   "disable_replacement_cask": null,
+   "disable_replacement_formula": null,
+   "disabled": false,
+   "full_name": "aom",
+   "homepage": "https://aomedia.googlesource.com/aom",
+   "installed": [
+    {
+     "built_as_bottle": true,
+     "installed_on_request": true,
+     "poured_from_bottle": true,
+     "runtime_dependencies": [
+      {
+       "bottle_rebuild": 0,
+       "compatibility_version": 1,
+       "declared_directly": true,
+       "full_name": "libvmaf",
+       "pkg_version": "3.2.1",
+       "revision": 0,
+       "version": "3.2.1"
+      }
+     ],
+     "sbom": [],
+     "time": 0,
+     "used_options": [],
+     "version": "3.15.2"
+    }
+   ],
+   "keg_only": false,
+   "keg_only_reason": null,
+   "license": "BSD-2-Clause",
+   "link_overwrite": [],
+   "linked_keg": "3.15.2",
+   "local_patch_checksums": {},
+   "name": "aom",
+   "no_autobump_message": null,
+   "no_linkage_dependencies": [],
+   "oldnames": [],
+   "optional_dependencies": [],
+   "options": [],
+   "outdated": true,
+   "patches": [],
+   "pinned": false,
+   "post_install_defined": false,
+   "post_install_steps": [],
+   "pour_bottle_only_if": null,
+   "recommended_dependencies": [],
+   "requirements": [],
+   "revision": 0,
+   "ruby_source_checksum": {
+    "sha256": "4e0022eb623e33a862b612237eaec8bae138876dde6f9ca6d164d36678f46b23"
+   },
+   "ruby_source_path": "Formula/a/aom.rb",
+   "service": null,
+   "skip_livecheck": false,
+   "tap": "homebrew/core",
+   "tap_git_head": "35ba8acfc3b1bfe74db33767a168e8a4db64134e",
+   "test_dependencies": [],
+   "urls": {
+    "head": {
+     "branch": "main",
+     "url": "https://aomedia.googlesource.com/aom.git",
+     "using": null
+    },
+    "stable": {
+     "checksum": null,
+     "revision": "b141d9c45db236335351c8a4b2a14b3ade27c937",
+     "tag": "v3.15.3",
+     "url": "https://aomedia.googlesource.com/aom.git",
+     "using": null
+    }
+   },
+   "uses_from_macos": [],
+   "uses_from_macos_bounds": [],
+   "version_scheme": 0,
+   "versioned_formulae": [],
+   "versions": {
+    "bottle": true,
+    "head": "HEAD",
+    "stable": "3.15.3"
+   }
+  }
+ ]
+}

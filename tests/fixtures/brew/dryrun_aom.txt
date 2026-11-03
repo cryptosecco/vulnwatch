@@ -1,0 +1,11 @@
+Warning: The following taps are not trusted:
+  example/tap
+
+Homebrew is currently ignoring formulae, casks and commands
+from these taps because tap trust is required.
+==> Downloading bottle manifests
+✔︎ Bottle Manifest aom (3.15.3)
+==> Would upgrade 1 requested outdated package
+aom 3.15.2 -> 3.15.3 (4.4MB)
+==> Would upgrade 1 dependent
+ffmpeg-full 9.0.2 -> 9.0.2_1 (24MB)

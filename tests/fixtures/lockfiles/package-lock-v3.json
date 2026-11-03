@@ -1,0 +1,7 @@
+{"name": "proj", "lockfileVersion": 3, "packages": {
+  "": {"name": "proj"},
+  "node_modules/lodash": {"version": "4.17.20"},
+  "node_modules/@scope/pkg": {"version": "1.2.3"},
+  "node_modules/a/node_modules/lodash": {"version": "4.17.21"},
+  "node_modules/local": {"link": true, "resolved": "../local"}
+}}

@@ -1,0 +1,44 @@
+{
+ "entries": [
+  {
+   "cvss": 9.8,
+   "firstSeenAt": "2026-11-03T08:10:34.799Z",
+   "fix": [
+    "1.8.8"
+   ],
+   "id": "CVE-2026-4052",
+   "kev": false,
+   "modifiedAt": "2026-11-03T08:02:33.735Z",
+   "product": "WSO2 API Manager \u00b7 WSO2 API Control Plane +1",
+   "publishedAt": "2026-11-03T08:02:33.735Z",
+   "statedSeverity": null,
+   "title": "Privilege Escalation via Token Endpoint in WSO2 API Manager (APIM 4.x/IS as Resident Key Manager)"
+  },
+  {
+   "cvss": 9.1,
+   "firstSeenAt": "2026-11-03T07:34:34.549Z",
+   "fix": [
+    "13062"
+   ],
+   "id": "CVE-2026-13594",
+   "kev": false,
+   "modifiedAt": "2026-11-03T07:29:10.038Z",
+   "product": "Zohocorp Log360 \u00b7 Zohocorp EventLog Analyzer",
+   "publishedAt": "2026-11-03T07:29:10.038Z",
+   "statedSeverity": null,
+   "title": "Improper Access Control vulnerability"
+  },
+  {
+   "cvss": 9.8,
+   "firstSeenAt": "2026-11-03T04:50:34.505Z",
+   "id": "CVE-2026-120534",
+   "kev": false,
+   "modifiedAt": "2026-11-03T04:43:09.501Z",
+   "product": "ACF Extended Advanced Custom Fields: Extended PRO",
+   "publishedAt": "2026-11-03T04:43:09.501Z",
+   "statedSeverity": null,
+   "title": "Advanced Custom Fields: Extended PRO <= 0.9.2.6 - Unauthenticated Remote Code Execution via Dynamic Render Field Type"
+  }
+ ],
+ "nextCursor": "WyIyMDI2LTExLTAyVDAwOjAwOjE4Ljc3NVoiLCJDVkUtMjAyNi0xMjAyNzkiXQ"
+}

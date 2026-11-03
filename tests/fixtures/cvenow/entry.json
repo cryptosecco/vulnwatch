@@ -1,0 +1,141 @@
+{
+ "affected": [
+  {
+   "product": "WSO2 API Manager",
+   "ranges": [],
+   "vendor": "WSO2",
+   "versions": [
+    "4.1.0",
+    "4.2.0",
+    "4.3.0",
+    "4.4.0",
+    "4.5.0",
+    "4.6.0"
+   ]
+  },
+  {
+   "product": "WSO2 API Control Plane",
+   "ranges": [],
+   "vendor": "WSO2",
+   "versions": [
+    "4.5.0",
+    "4.6.0"
+   ]
+  },
+  {
+   "package": "org.wso2.km.ext.wso2is:wso2is.key.manager.core",
+   "product": "WSO2 Identity Server Key Manager Connector (apim-km-wso2is)",
+   "ranges": [
+    {
+     "fixed": "1.8.8",
+     "introduced": "0"
+    }
+   ],
+   "vendor": "WSO2"
+  }
+ ],
+ "aliases": [],
+ "bundles": [],
+ "context": {
+  "attacker": {
+   "access": "network",
+   "login": "none",
+   "nonDefaultSetup": null,
+   "userAction": false
+  },
+  "conditions": [
+   {
+    "quote": "This issue only impacts deployments where WSO2 Identity Server is configured as a Resident Key Manager with database sharing.",
+    "sourceUrl": "https://security.docs.wso2.com/en/latest/security-announcements/security-advisories/2026/WSO2-2026-5212/",
+    "text": "WSO2 Identity Server is configured as a Resident Key Manager with database sharing."
+   },
+   {
+    "quote": "WSO2 API Manager: 4.6.0, 4.5.0, 4.4.0, 4.3.0, 4.2.0, 4.1.0",
+    "sourceUrl": "https://security.docs.wso2.com/en/latest/security-announcements/security-advisories/2026/WSO2-2026-5212/",
+    "text": "Affected WSO2 API Manager versions are 4.1.0 through 4.6.0, and WSO2 API Control Plane 4.5.0 and 4.6.0."
+   }
+  ],
+  "conflicts": [],
+  "faq": [
+   {
+    "answer": "A low-privileged user can invoke the System REST APIs of WSO2 API Manager, which can potentially lead to full administrative account takeover.",
+    "key": "meaning",
+    "sources": [
+     "https://security.docs.wso2.com/en/latest/security-announcements/security-advisories/2026/WSO2-2026-5212/"
+    ]
+   },
+   {
+    "answer": "The issue affects WSO2 API Manager 4.1.0 through 4.6.0 and WSO2 API Control Plane 4.5.0 and 4.6.0, and only where WSO2 Identity Server is configured as a Resident Key Manager with database sharing. To check, compare your API Manager version with the listed versions and review whether your Key Manager setup uses Identity Server as a Resident Key Manager with database sharing.",
+    "key": "affected",
+    "sources": [
+     "https://security.docs.wso2.com/en/latest/security-announcements/security-advisories/2026/WSO2-2026-5212/"
+    ]
+   },
+   {
+    "answer": "Update the WSO2 Identity Server Key Manager Connector (apim-km-wso2is) to version 1.8.8 or later, which is the fixed version listed in the advisory facts.",
+    "key": "action",
+    "sources": [
+     "https://security.docs.wso2.com/en/latest/security-announcements/security-advisories/2026/WSO2-2026-5212/"
+    ]
+   }
+  ],
+  "fix": null,
+  "generatedAt": "2026-11-03T08:10:41.429Z",
+  "impact": {
+   "quote": "potentially leading to full administrative account takeover",
+   "sourceUrl": "https://security.docs.wso2.com/en/latest/security-announcements/security-advisories/2026/WSO2-2026-5212/",
+   "text": "A low-privileged user can invoke the System REST APIs of WSO2 API Manager, potentially leading to full administrative account takeover."
+  },
+  "inputsHash": "68682c83646915dc",
+  "model": "anthropic/claude-haiku-5.5",
+  "promptVersion": "v2",
+  "sentence": "Only deployments where WSO2 Identity Server is the Resident Key Manager with database sharing are affected, in WSO2 API Manager 4.1.0 through 4.6.0. The WSO2 Identity Server Key Manager Connector is fixed in 1.8.8.",
+  "vendorSeverity": null
+ },
+ "earlyWarning": [],
+ "exploitation": {
+  "epssReached": null,
+  "exploitDb": null,
+  "githubPoc": null,
+  "kev": null,
+  "metasploit": null,
+  "nuclei": null
+ },
+ "exposure": "Unclear",
+ "feedId": "CVE-2026-4052",
+ "firstSeenAt": "2026-11-03T08:10:34.799Z",
+ "id": "CVE-2026-4052",
+ "modifiedAt": "2026-11-03T08:02:33.735Z",
+ "originalDescription": "This issue only impacts deployments where WSO2 Identity Server is configured as a Resident Key Manager with database sharing. In such environments, a self-registered user may gain access to the System REST APIs of WSO2 API Manager by obtaining a token from the WSO2 Identity Server token endpoint.",
+ "publishedAt": "2026-11-03T08:02:33.735Z",
+ "references": [
+  {
+   "type": "advisory",
+   "url": "https://security.docs.wso2.com/en/latest/security-announcements/security-advisories/2026/WSO2-2026-5212/"
+  }
+ ],
+ "related": [],
+ "severity": {
+  "cvss": 9.8,
+  "source": "cna",
+  "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H"
+ },
+ "sources": [
+  {
+   "firstSeenAt": "2026-11-03T08:10:34.799Z",
+   "license": "CVE Terms of Use",
+   "name": "cvelistV5",
+   "url": "https://www.cve.org/CVERecord?id=CVE-2026-4052"
+  }
+ ],
+ "ssvc": null,
+ "statedSeverity": null,
+ "status": "published",
+ "summary": {
+  "model": "anthropic/claude-haiku-5.5",
+  "promptVersion": "v1",
+  "text": "This issue affects WSO2 API Manager deployments that use WSO2 Identity Server as a Resident Key Manager with shared databases. In these setups, a self-registered user could obtain a token from the Identity Server token endpoint and use it to gain unauthorized access to API Manager's System REST APIs."
+ },
+ "supersededBy": [],
+ "title": "Privilege Escalation via Token Endpoint in WSO2 API Manager (APIM 4.x/IS as Resident Key Manager)"
+}

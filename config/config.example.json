@@ -1,0 +1,64 @@
+{
+  "user": "your-username",
+  "language": "en",
+  "auto_apply": false,
+  "cooldown_hours": 48,
+  "backfill_days": 90,
+  "max_records_per_run": 3000,
+  "min_request_interval": 0.2,
+  "host_intervals": {
+    "cve.now": 2.0
+  },
+  "allowed_hosts": [
+    "cve.now",
+    "f9gkulwameaj0boi.public.blob.vercel-storage.com",
+    "www.cisa.gov",
+    "raw.githubusercontent.com",
+    "osv-vulnerabilities.storage.googleapis.com",
+    "registry.npmjs.org",
+    "api.github.com"
+  ],
+  "osv_ecosystems": [
+    "npm",
+    "PyPI"
+  ],
+  "osv_zip_max_bytes": 450000000,
+  "hold": [],
+  "app_dirs": [
+    "/Applications",
+    "~/Applications"
+  ],
+  "lockfile_max_depth": 4,
+  "google_updater": "~/Library/Application Support/Google/GoogleUpdater/Current/GoogleUpdater.app/Contents/MacOS/GoogleUpdater",
+  "chrome_team_id": "EQHXZ8M8AV",
+  "state_dir": "~/Library/Application Support/vulnwatch",
+  "log_dir": "~/Library/Logs/vulnwatch",
+  "aliases_file": "aliases.json",
+  "lockfile_roots": [
+    "~/Code"
+  ],
+  "venv_roots": [
+    "~/Code"
+  ],
+  "protected_dirs": [
+    "~/Documents",
+    "~/Desktop",
+    "~/Downloads",
+    "~/Library/Mobile Documents",
+    "~/vulnwatch/tests/fixtures"
+  ],
+  "npm_global": {
+    "prefix": "~/.npm-global",
+    "node": "/opt/homebrew/bin/node",
+    "npm": "/opt/homebrew/bin/npm"
+  },
+  "runtimes": [
+    {
+      "label": "nvm",
+      "path": "~/.nvm/versions/node/*/bin/node",
+      "product": "node"
+    }
+  ],
+  "path_node": "/opt/homebrew/bin/node",
+  "brew": "/opt/homebrew/bin/brew"
+}

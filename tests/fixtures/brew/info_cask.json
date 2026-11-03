@@ -1,0 +1,108 @@
+{
+ "casks": [
+  {
+   "artifacts": [
+    {
+     "preflight_steps": [
+      {
+       "steps": [
+        {
+         "non_recursive": true,
+         "paths": [
+          {
+           "base": "staged_path",
+           "path": "*.app/**/__pycache__"
+          }
+         ],
+         "permissions": "u+w",
+         "type": "set_permissions"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "app": [
+      "Blender.app"
+     ],
+     "target": "/Applications/Blender.app"
+    },
+    {
+     "command_wrapper": [
+      "blender",
+      {
+       "executable": "/Applications/Blender.app/Contents/MacOS/Blender"
+      }
+     ],
+     "target": "/opt/homebrew/bin/blender"
+    },
+    {
+     "zap": [
+      {
+       "trash": [
+        "~/Library/Application Support/Blender",
+        "~/Library/Caches/Blender",
+        "~/Library/Saved Application State/org.blenderfoundation.blender.savedState"
+       ]
+      }
+     ]
+    }
+   ],
+   "auto_updates": null,
+   "autobump": true,
+   "bundle_short_version": "5.2.3",
+   "bundle_version": "5.2.3",
+   "caveats": null,
+   "caveats_rosetta": null,
+   "conflicts_with": {
+    "cask": [
+     "blender@lts"
+    ]
+   },
+   "container": null,
+   "depends_on": {
+    "macos": {}
+   },
+   "deprecate_args": null,
+   "deprecated": false,
+   "deprecation_date": null,
+   "deprecation_reason": null,
+   "deprecation_replacement_cask": null,
+   "deprecation_replacement_formula": null,
+   "desc": "3D creation suite",
+   "disable_args": null,
+   "disable_date": null,
+   "disable_reason": null,
+   "disable_replacement_cask": null,
+   "disable_replacement_formula": null,
+   "disabled": false,
+   "full_token": "blender",
+   "homepage": "https://www.blender.org/",
+   "installed": "5.2.3",
+   "installed_time": 0,
+   "languages": [],
+   "name": [
+    "Blender"
+   ],
+   "no_autobump_message": null,
+   "old_tokens": [],
+   "outdated": false,
+   "pinned": false,
+   "pinned_version": null,
+   "rename": [],
+   "ruby_source_checksum": {
+    "sha256": "f117a437d642493b7f4cc6dc8c7a0eaf742a01982fbe9c95224ba689100661f2"
+   },
+   "ruby_source_path": "Casks/b/blender.rb",
+   "sha256": "acc05374485a272342d4b323c15ac01953e7f697da2f1bad8af9c3bf087267a4",
+   "skip_livecheck": false,
+   "tap": "homebrew/cask",
+   "tap_git_head": "aff92d42b70f5bc654005dac4ffd0f1eb5c32627",
+   "token": "blender",
+   "url": "https://download.blender.org/release/Blender5.2/blender-5.2.3-macos-arm64.dmg",
+   "url_specs": {},
+   "version": "5.2.3"
+  }
+ ],
+ "formulae": []
+}

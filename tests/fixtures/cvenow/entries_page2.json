@@ -1,0 +1,38 @@
+{
+ "entries": [
+  {
+   "cvss": 10,
+   "firstSeenAt": "2026-11-01T23:36:34.482Z",
+   "id": "CVE-2026-120277",
+   "kev": false,
+   "modifiedAt": "2026-11-01T23:30:19.046Z",
+   "product": "WAVLINK WN536AX6-A",
+   "publishedAt": "2026-11-01T23:30:19.046Z",
+   "statedSeverity": null,
+   "title": "WAVLINK WN536AX6-A WireGuard CLI Group ioos sub_41a1d8 os command injection"
+  },
+  {
+   "cvss": 10,
+   "firstSeenAt": "2026-11-01T23:21:34.788Z",
+   "id": "CVE-2026-120276",
+   "kev": false,
+   "modifiedAt": "2026-11-01T23:15:12.335Z",
+   "product": "WAVLINK WN536AX6-A",
+   "publishedAt": "2026-11-01T23:15:12.335Z",
+   "statedSeverity": null,
+   "title": "WAVLINK WN536AX6-A Web Management ioos sub_416760 os command injection"
+  },
+  {
+   "cvss": 9.4,
+   "firstSeenAt": "2026-11-01T18:39:34.719Z",
+   "id": "CVE-2026-120240",
+   "kev": false,
+   "modifiedAt": "2026-11-02T14:30:33.865Z",
+   "product": "WAVLINK WN553X1-B",
+   "publishedAt": "2026-11-01T18:30:11.233Z",
+   "statedSeverity": null,
+   "title": "WAVLINK WN553X1-B WireGuard CLI Group ioos sub_41A748 os command injection"
+  }
+ ],
+ "nextCursor": "WyIyMDI2LTEwLTMxVDA3OjQ2OjQ5LjIzN1oiLCJDVkUtMjAyNi0xMTkwOTYiXQ"
+}
