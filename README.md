@@ -1,10 +1,70 @@
-# vulnwatch
+```text
+                 _                          _          _
+  __   __ _   _ | | _ __  __      __  __ _ | |_   ___ | |__
+  \ \ / /| | | || || '_ \ \ \ /\ / / / _` || __| / __|| '_ \
+   \ V / | |_| || || | | | \ V  V / | (_| || |_ | (__ | | | |
+    \_/   \__,_||_||_| |_|  \_/\_/   \__,_| \__| \___||_| |_|
 
-*[Leggi in italiano](README.it.md)*
+  public data          your Mac                            you
+ +-------------+      +----------------------------+      +----------------------+
+ | cve.now     |      | what you have installed    |      | report at 07:30      |
+ | CISA KEV    | ---> | is matched here, locally;  | ---> | vulnwatch apply <id> |
+ | CVE records |      | upgrades are audited first |      |                      |
+ | OSV         |      |                            |      |                      |
+ +-------------+      +----------------------------+      +----------------------+
+                  <----- nothing about your Mac goes back -----
+```
 
-A daily vulnerability check for your Mac that never tells anyone what you run.
+**A daily vulnerability check for your Mac that never tells anyone what you run.**
 
-Every morning at 07:30 vulnwatch downloads public vulnerability data, compares it **on your Mac** with the software you have installed, and writes a report: what is affected, what the fix is, and the exact command to apply it after a fresh audit. It starts in **shadow mode**: it reports, it never changes anything on its own.
+[![tests](https://github.com/cryptosecco/vulnwatch/actions/workflows/tests.yml/badge.svg)](https://github.com/cryptosecco/vulnwatch/actions/workflows/tests.yml) · macOS · Python standard library only · [MIT](LICENSE) · *[Leggi in italiano](README.it.md)*
+
+## Why
+
+A developer's Mac runs hundreds of things that get security fixes:
+- macOS and its apps;
+- Homebrew formulae and global npm tools;
+- the copies of Node that other tools bring along;
+- the dependencies pinned in every project you have cloned.
+
+New vulnerabilities are published every day, and some are already being exploited by the time you read about them. Keeping up by hand is not realistic. The usual shortcut, sending your package list to a scanning service, gives a third party an exact map of what is unpatched on your machine.
+
+vulnwatch does the whole check **on your Mac**:
+- Every morning at 07:30 it downloads the same public vulnerability data everyone gets and compares it locally with what you have installed.
+- It tells you what is affected, what the fix is, and the exact command to apply it after a fresh audit.
+- It starts in **shadow mode**: it reports and never changes anything on its own, until you choose to turn on automatic upgrades.
+
+## What you get
+
+A macOS notification such as *"3 waiting for you · 0 applied · 0 malicious"*, and a daily report in Markdown (plus JSON). One entry looks like this; the vulnerability ids and versions are made up:
+
+```markdown
+### brew formula `openssl@3` `3.5.9` · 2 vulnerabilities
+- Location: `/opt/homebrew`
+- Fixed version: 3.5.10 (source: cverecord)
+- KEV: no · Critical: yes (1)
+- Vulnerabilities: `CVE-2026-1111` (`7c1f0a2b9d4e`), `CVE-2026-2222` (`2b8e4d1c0f3a`)
+
+| check | result | detail |
+|---|---|---|
+| tap_core | ✅ ok |  |
+| candidate | ✅ ok | `3.5.10` |
+| same_major | ✅ ok |  |
+| bottle_available | ✅ ok |  |
+| dry_run_only_target | ✅ ok |  |
+| post_install_unchanged | ✅ ok |  |
+| caveats_unchanged | ✅ ok |  |
+| not_running_service | ✅ ok |  |
+| not_deprecated | ✅ ok |  |
+| cooldown | ✅ ok | `published 96 hours ago` |
+
+- Command: `vulnwatch apply 7c1f0a2b9d4e`
+> [untrusted text] `OpenSSL: example advisory title`
+```
+
+The report also lists what has no patch yet, approximate matches to verify, malicious packages, ignored entries and whether every source answered. It also shows what vulnwatch would have upgraded on its own while it is in shadow mode.
+
+## Why you can trust it
 
 - **Private by design.** What it downloads from the vulnerability sources never depends on what you have installed, so the sources cannot learn your software from the requests. All matching happens locally.
 - **Audit first, apply later.** Before an upgrade is applied it is checked on the official channel:
@@ -32,6 +92,18 @@ It matches them against:
 - global npm packages;
 - copies of Node and Bun (on your PATH, or installed with nvm, volta, fnm, asdf or mise);
 - the packages pinned in your projects' lockfiles: `package-lock.json`, `pnpm-lock.yaml`, `yarn.lock`, `bun.lock` and `requirements.txt`.
+
+## How it compares
+
+| Tool | What it covers | What it sends out |
+|---|---|---|
+| `brew outdated` / `brew upgrade` | Homebrew only; every update, not just security fixes | nothing beyond Homebrew's own requests |
+| `npm audit` | one project at a time | that project's dependency list, to the npm registry |
+| Dependabot, Snyk and similar | the repositories you connect | they read your manifests and lockfiles in their service |
+| `osv-scanner` | the folders you point it at | package names and versions to the OSV API, unless run offline |
+| **vulnwatch** | the whole Mac: macOS, apps, Homebrew, npm globals, Node/Bun copies, every project's lockfile | nothing about your software to the vulnerability sources |
+
+It does not replace those tools: keep Dependabot on your repositories, because vulnwatch watches the machine you work on. It also audits every upgrade before applying it, which none of the others do for you.
 
 ## Install (about 5 minutes)
 
@@ -72,7 +144,7 @@ Integrity:   intact
 Schedule:    every day at 07:30
 Last run:    started 2026-11-03T06:30:00Z, finished 2026-11-03 06:41:12 UTC, status ok
 Report:      ~/Library/Application Support/vulnwatch/reports/2026-11-03.md
-             Summary per item: 0 malicious · 0 applied · 0 in shadow · 3 waiting for you · 1 without a patch · 0 to verify (12 vulnerabilities in total).
+             Summary per item: 0 malicious · 0 applied · 0 in shadow · 3 waiting for you · 1 without a patch · …
 Mode:        shadow (reports only, never applies anything on its own)
 ```
 
