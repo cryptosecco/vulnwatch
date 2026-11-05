@@ -109,7 +109,9 @@ It does not replace those tools: keep Dependabot on your repositories, because v
 
 ## Install (about 5 minutes)
 
-You need macOS (Apple Silicon or Intel), an administrator account and Apple's Command Line Tools (`xcode-select --install` if `git` is missing). Homebrew and npm are optional.
+**With a coding agent:** give it this repository's link and ask it to install vulnwatch. [AGENTS.md](AGENTS.md) tells it what to do: it reviews the code, asks you the language and the project folders, runs the setup and leaves you the one command that needs your password.
+
+**By hand:** you need macOS (Apple Silicon or Intel), an administrator account and Apple's Command Line Tools (`xcode-select --install` if `git` is missing). Homebrew and npm are optional.
 
 ```bash
 git clone https://github.com/cryptosecco/vulnwatch.git
@@ -220,7 +222,7 @@ sudo ./install.sh --uninstall --purge   # also deletes reports, state and logs
 
 ## Audit it yourself
 
-It is about 5,000 lines of standard-library Python, with no dependencies. Good places to start:
+It is about 4,500 lines of standard-library Python (tests excluded), with no dependencies. Good places to start:
 - `vulnwatch/runner.py`: the order of a run;
 - `vulnwatch/net.py`: the host allowlist and request log;
 - `vulnwatch/apply.py`: the fixed command templates;

@@ -126,6 +126,23 @@ class SetupMainTest(SetupTestBase):
         self.assertEqual(raw["lockfile_roots"], ["~/Code"])
         self.assertEqual(raw["language"], "en")
 
+    def test_no_terminal_uses_detected_values(self):
+        # A coding agent runs ./setup.sh with no terminal on stdin: input() raises EOFError at once.
+        os.makedirs(os.path.join(self.home, "Code"))
+        calls = []
+
+        def no_terminal(prompt):
+            calls.append(prompt)
+            raise EOFError
+
+        self.assertEqual(self.run_setup(["--no-preview"], input_fn=no_terminal), 0)
+        self.assertEqual(len(calls), 1, "after the first EOF, setup must not ask again")
+        with open(self.cfg_path) as f:
+            raw = json.load(f)
+        self.assertEqual(raw["language"], "en")
+        self.assertEqual(raw["lockfile_roots"], ["~/Code"])
+        self.assertTrue(any("--yes" in line for line in self.out))
+
     def test_written_config_protects_fixtures(self):
         self.assertEqual(self.run_setup(["--yes", "--no-preview"]), 0)
         cfg = load_config(self.cfg_path)
