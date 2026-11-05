@@ -251,17 +251,34 @@ def main(argv: List[str], repo_root: str, run=None, env: Optional[Mapping[str, s
         return 1
 
     d = detect(home, env, run, user, **(detect_kwargs or {}))
+    # With no terminal on stdin (a coding agent, a pipe) input() raises EOFError at once:
+    # stop asking and keep the detected values, exactly as --yes does.
+    interactive = not args.yes
+
+    def ask(prompt: str) -> str:
+        nonlocal interactive
+        if not interactive:
+            return ""
+        try:
+            return input_fn(prompt)
+        except EOFError:
+            interactive = False
+            out("")
+            out("No terminal to answer from: using the detected values, as with --yes. / "
+                "Nessun terminale da cui rispondere: uso i valori rilevati, come con --yes.")
+            return ""
+
     language = args.lang or d.language
-    if not args.yes and not args.lang:
-        answer = input_fn("Language / Lingua [en/it] (%s): " % language).strip().lower()
+    if not args.lang:
+        answer = ask("Language / Lingua [en/it] (%s): " % language).strip().lower()
         if answer in LANGUAGES:
             language = answer
     set_language(language)
     roots = list(args.roots) if args.roots else list(d.roots)
-    if not args.yes and not args.roots:
-        answer = input_fn(t("Project folders to scan for lockfiles, comma-separated (%s): ",
-                            "Cartelle dei progetti in cui cercare i lockfile, separate da virgole (%s): ")
-                          % (", ".join(roots) or t("none", "nessuna"))).strip()
+    if not args.roots:
+        answer = ask(t("Project folders to scan for lockfiles, comma-separated (%s): ",
+                       "Cartelle dei progetti in cui cercare i lockfile, separate da virgole (%s): ")
+                     % (", ".join(roots) or t("none", "nessuna"))).strip()
         if answer:
             roots = [x.strip() for x in answer.split(",") if x.strip()]
     roots = check_roots(roots, home, out)
